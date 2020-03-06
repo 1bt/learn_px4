@@ -138,33 +138,6 @@ if [[ $INSTALL_NUTTX == "true" ]]; then
 	sudo apt-get remove modemmanager -y
 
 	# arm-none-eabi-gcc
-	NUTTX_GCC_VERSION="7-2017-q4-major"
-
-if [ $(which arm-none-eabi-gc) ]; then
-	GCC_VER_STR=$(arm-none-eabi-gcc --version)
-	GCC_FOUND_VER=$(echo $GCC_VER_STR | grep -c "${NUTTX_GCC_VERSION}")
-fi
-
-	if [ ! ${GCC_FOUND_VER+x} && $GCC_FOUND_VER -eq "1" ]; then
-		echo "arm-none-eabi-gcc-${NUTTX_GCC_VERSION} found, skipping installation"
-
-	else
-		echo "Installing arm-none-eabi-gcc-${NUTTX_GCC_VERSION}";
-		wget -O /tmp/gcc-arm-none-eabi-${NUTTX_GCC_VERSION}-linux.tar.bz2 https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/7-2017q4/gcc-arm-none-eabi-${NUTTX_GCC_VERSION}-linux.tar.bz2 && \
-			sudo tar -jxf /tmp/gcc-arm-none-eabi-${NUTTX_GCC_VERSION}-linux.tar.bz2 -C /opt/;
-
-		# add arm-none-eabi-gcc to user's PATH
-		exportline="export PATH=/opt/gcc-arm-none-eabi-${NUTTX_GCC_VERSION}/bin:\$PATH"
-
-		if grep -Fxq "$exportline" $HOME/.profile;
-		then
-			echo "${NUTTX_GCC_VERSION} path already set.";
-		else
-			echo $exportline >> $HOME/.profile;
-		fi
-	fi
-
-fi
 
 # Simulation tools
 if [[ $INSTALL_SIM == "true" ]]; then
@@ -206,4 +179,5 @@ fi
 if [[ $INSTALL_NUTTX == "true" ]]; then
 	echo
 	echo "Reboot or logout, login computer before attempting to build NuttX targets"
+fi
 fi
